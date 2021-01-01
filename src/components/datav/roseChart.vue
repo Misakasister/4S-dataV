@@ -1,6 +1,6 @@
 <template>
   <div id="rose-chart">
-    <div class="rose-chart-title">销售员销售额分布</div>
+    <div class="rose-chart-title">汽车销售品牌占比</div>
     <dv-charts :option="option" />
   </div>
 </template>
@@ -46,7 +46,7 @@ export default {
       }
 
       $.ajax({
-    url:this.apiUrl.sellCar,
+    url:this.apiUrl.carCount,
     type:'POST', //GET
     async:false,    //或false,是否异步
     data:{
@@ -56,10 +56,10 @@ export default {
     beforeSend:function(xhr){
     },
     success:function(data,textStatus,jqXHR){
-          for(let i = 0; i < data.length; i++){
+          for(let i = 0; i < data.data.length; i++){
          let obj={
-           name:data[i].sell_name,
-           value: data[i].price,
+           name:data.data[i].name,
+           value: data.data[i].count,
          }
          that.option.series[0].data.push(obj);
          }

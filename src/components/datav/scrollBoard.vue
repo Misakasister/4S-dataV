@@ -5,26 +5,16 @@
 </template>
 
 <script>
+import $ from 'jquery';
 export default {
   name: 'ScrollBoard',
   data () {
     return {
       config: {
-        header: ['时间', '病害信息', '数量', '标段'],
-        data: [
-          ['2019-07-01 19:25:00', '路面危害-松散', '5', 'xxxxxxx'],
-          ['2019-07-02 17:25:00', '路面危害-路面油污清理', '13', 'xxxxxxx'],
-          ['2019-07-03 16:25:00', '交安设施-交通标志牌结构', '6', 'xxxxxxx'],
-          ['2019-07-04 15:25:00', '路基危害-防尘网', '2', 'xxxxxxx'],
-          ['2019-07-05 14:25:00', '交安设施-交通标志牌结构', '1', 'xxxxxxx'],
-          ['2019-07-06 13:25:00', '路面危害-松散', '3', 'xxxxxxx'],
-          ['2019-07-07 12:25:00', '路基危害-防尘网', '4', 'xxxxxxx'],
-          ['2019-07-08 11:25:00', '路面危害-路面油污清理', '2', 'xxxxxxx'],
-          ['2019-07-09 10:25:00', '交安设施-交通标志牌结构', '5', 'xxxxxxx'],
-          ['2019-07-10 09:25:00', '路基危害-防尘网', '3', 'xxxxxxx']
-        ],
+        header: ['车辆名', '颜色', '价格', '销售员'],
+        data: [],
         index: true,
-        columnWidth: [50, 170, 300],
+        columnWidth: [40,100, 100, 150,150],
         align: ['center'],
         rowNum: 7,
         headerBGC: '#1981f6',
@@ -33,7 +23,33 @@ export default {
         evenRowBGC: 'rgba(10, 29, 50, 0.8)'
       }
     }
+  },
+    mounted(){
+    let that = this;
+    $.ajax({
+    url:this.apiUrl.carSell,
+    type:'POST', //GET
+    async:false,    //或false,是否异步
+    data:{
+    },
+    timeout:5000,    //超时时间
+    dataType:'json',    //返回的数据格式：
+    beforeSend:function(xhr){
+    },
+    success:function(data,textStatus,jqXHR){
+          for(let i = 0; i < data.length; i++){
+         let obj=[data[i].name,data[i].color,data[i].price,data[i].sell_name];
+         that.config.data.push(obj);
+         }
+
+    },
+    error:function(xhr,textStatus){
+    },
+    complete:function(){
+    }
+})
   }
+  
 }
 </script>
 

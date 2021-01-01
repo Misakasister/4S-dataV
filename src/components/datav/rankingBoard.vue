@@ -1,57 +1,50 @@
 <template>
   <div id="ranking-board">
-    <div class="ranking-board-title">巡查上报记录数量</div>
+    <div class="ranking-board-title">车辆销售排行</div>
     <dv-scroll-ranking-board :config="config" />
   </div>
 </template>
 
 <script>
+import $ from 'jquery';
 export default {
   name: 'RankingBoard',
   data () {
     return {
       config: {
         data: [
-          {
-            name: '日常养护',
-            value: 55
-          },
-          {
-            name: '交通事故',
-            value: 120
-          },
-          {
-            name: '路面',
-            value: 78
-          },
-          {
-            name: '桥通',
-            value: 66
-          },
-          {
-            name: '计日工',
-            value: 80
-          },
-          {
-            name: '路基',
-            value: 45
-          },
-          {
-            name: '交安设施',
-            value: 29
-          },
-          {
-            name: '除雪',
-            value: 29
-          },
-          {
-            name: '绿化',
-            value: 29
-          }
         ],
         rowNum: 9
       }
     }
+  },
+  mounted(){
+    let that = this;
+      $.ajax({
+    url:this.apiUrl.carCount,
+    type:'POST', //GET
+    async:false,    //或false,是否异步
+    data:{
+    },
+    timeout:5000,    //超时时间
+    dataType:'json',    //返回的数据格式：
+    beforeSend:function(xhr){
+    },
+    success:function(data,textStatus,jqXHR){
+          for(let i = 0; i < data.data.length; i++){
+         let obj={
+           name:data.data[i].name,
+           value: data.data[i].count,
+         }
+         that.config.data.push(obj);
+         }
+
+    },
+    error:function(xhr,textStatus){
+    },
+    complete:function(){
+    }
+})
   }
 }
 </script>

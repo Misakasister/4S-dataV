@@ -12,23 +12,24 @@
       <dv-charts class="ring-charts" :option="card.ring" />
       <div class="card-footer">
         <div class="card-footer-item">
-          <div class="footer-title">累计金额</div>
+          <div class="footer-title">累计保养数</div>
           <div class="footer-detail">
-            <dv-digital-flop :config="card.total" style="width:70%;height:35px;" />元
+            <dv-digital-flop :config="card.total" style="width:70%;height:35px;" />次
           </div>
         </div>
-        <div class="card-footer-item">
+        <!-- <div class="card-footer-item">
           <div class="footer-title">巡查病害</div>
           <div class="footer-detail">
             <dv-digital-flop :config="card.num" style="width:70%;height:35px;" />处
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import $ from 'jquery';
 export default {
   name: 'Cards',
   data () {
@@ -40,6 +41,7 @@ export default {
     createData () {
       const { randomExtend } = this
 
+ let that = this;
       this.cards = new Array(5).fill(0).map((foo, i) => ({
         title: '测试路段' + (i + i),
         total: {
@@ -69,7 +71,7 @@ export default {
               arcLineWidth: 13,
               radius: '80%',
               data: [
-                { name: '资金占比', value: randomExtend(40, 60) }
+                // { name: '次数占比', value: randomExtend(40, 60) }
               ],
               axisLabel: {
                 show: false
@@ -87,7 +89,7 @@ export default {
               },
               details: {
                 show: true,
-                formatter: '资金占比{value}%',
+                formatter: '次数占比{value}%',
                 style: {
                   fill: '#1ed3e5',
                   fontSize: 20
@@ -98,6 +100,37 @@ export default {
           color: ['#03d3ec']
         }
       }))
+
+        $.ajax({
+    url:this.apiUrl.carMaintain,
+    type:'POST', //GET
+    async:false,    //或false,是否异步
+    data:{
+    },
+    timeout:5000,    //超时时间
+    dataType:'json',    //返回的数据格式：
+    beforeSend:function(xhr){
+    },
+    success:function(data,textStatus,jqXHR){
+      console.log(data.data[0]);
+          for(let i = 0; i < data.data.length; i++){
+         let obj={
+           name: data.data[i].content,
+           value:data.data[i].count
+         }
+         console.log(that.cards);
+         that.cards[i].title = obj.name;
+         that.cards[i].total.number[0]=obj.value;
+         that.cards[i].ring.series[0].data.push(obj);
+         }
+
+    },
+    error:function(xhr,textStatus){
+    },
+    complete:function(){
+    }
+})
+
     },
     randomExtend (minNum, maxNum) {
       if (arguments.length === 1) {
@@ -164,7 +197,7 @@ export default {
   .card-footer-item {
     padding: 5px 10px 0px 10px;
     box-sizing: border-box;
-    width: 40%;
+    width: 50%;
     background-color: rgba(6, 30, 93, 0.7);
     border-radius: 3px;
 
