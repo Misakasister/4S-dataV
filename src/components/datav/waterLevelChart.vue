@@ -1,9 +1,9 @@
 <template>
   <div id="water-level-chart">
-    <div class="water-level-chart-title">计划资金累计完成情况</div>
+    <div class="water-level-chart-title">总销售额</div>
 
     <div class="water-level-chart-details">
-      累计完成<span>235,680</span>元
+    <span>{{sell}}</span>元
     </div>
 
     <div class="chart-container">
@@ -13,16 +13,48 @@
 </template>
 
 <script>
+import $ from 'jquery';
 export default {
   name: 'WaterLevelChart',
   data () {
     return {
       config: {
-        data: [45],
+        data: [50],
         shape: 'round',
         waveHeight: 25,
-        waveNum: 2
-      }
+        waveNum: 3,
+         formatter:''
+      },
+      sell:0
+    }
+  },
+  mounted(){
+let that = this;
+    $.ajax({
+    url:this.apiUrl.carNumber,
+    type:'POST', //GET
+    async:false,    //或false,是否异步
+    data:{
+    },
+    timeout:5000,    //超时时间
+    dataType:'json',    //返回的数据格式：
+    beforeSend:function(xhr){
+    },
+    success:function(data,textStatus,jqXHR){
+        console.log(data.data.sales);
+        that.sell = data.data.sales;
+        
+    },
+    error:function(xhr,textStatus){
+    },
+    complete:function(){
+    }
+})
+  },
+  watch:{
+    sell(v){
+      this.config.data[0]=9;
+      console.log(this.config);
     }
   }
 }

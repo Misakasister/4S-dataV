@@ -45,7 +45,7 @@ export default {
       this.cards = new Array(5).fill(0).map((foo, i) => ({
         title: '测试路段' + (i + i),
         total: {
-          number: [randomExtend(9000, 10000)],
+          number: [7],
           content: '{nt}',
           textAlign: 'right',
           style: {
@@ -54,7 +54,7 @@ export default {
           }
         },
         num: {
-          number: [randomExtend(30, 60)],
+          number: [7],
           content: '{nt}',
           textAlign: 'right',
           style: {
@@ -112,15 +112,19 @@ export default {
     beforeSend:function(xhr){
     },
     success:function(data,textStatus,jqXHR){
-      console.log(data.data[0]);
+
+      let num = 0;
+      for(let i = 0; i< data.data.length;i++){
+          num+=data.data[i].count;
+      }
           for(let i = 0; i < data.data.length; i++){
          let obj={
            name: data.data[i].content,
-           value:data.data[i].count
+           value:(data.data[i].count/num)*100,
          }
          console.log(that.cards);
          that.cards[i].title = obj.name;
-         that.cards[i].total.number[0]=obj.value;
+         that.cards[i].total.number[0]=data.data[i].count;
          that.cards[i].ring.series[0].data.push(obj);
          }
 

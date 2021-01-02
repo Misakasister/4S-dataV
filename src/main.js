@@ -13,7 +13,8 @@ axios.defaults.withCredentials=true,
 Vue.prototype.apiUrl = {
   carCount: 'http://192.168.1.102:8080/api/CarSell',
   carSell:'http://192.168.1.102:8080/api/SellCar',
-  carMaintain:'http://192.168.1.102:8080/api/CarMaintain'
+  carMaintain:'http://192.168.1.102:8080/api/CarMaintain',
+  carNumber:"http://192.168.1.102:8080/api/Sales"
 }
 new Vue({
   render: h => h(App)
